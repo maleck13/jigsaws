@@ -3,9 +3,9 @@ package jigsaw
 import (
 	"errors"
 	"fmt"
-	"github.com/disintegration/imaging"
-	"github.com/llgcode/draw2d/draw2dimg"
-	"golang.org/x/image/draw"
+	"github.com/maleck13/jigsaw/Godeps/_workspace/src/github.com/disintegration/imaging"
+	"github.com/maleck13/jigsaw/Godeps/_workspace/src/github.com/llgcode/draw2d/draw2dimg"
+	"github.com/maleck13/jigsaw/Godeps/_workspace/src/golang.org/x/image/draw"
 	"image"
 )
 
@@ -25,7 +25,7 @@ type PieceMarker interface {
 }
 
 func Percentage(piece *Piece, percentage float64) int {
-	if piece.Height > piece.Width{
+	if piece.Height > piece.Width {
 		return int((percentage / 100.0) * float64(piece.Height))
 	}
 	return int((percentage / 100.0) * float64(piece.Width))
@@ -177,32 +177,32 @@ func (jc JointCutter) cutExternal(joint PieceJoint, from image.Image) (image.Ima
 	var percentInc = 0.0
 
 	if joint.Side == RIGHT_SIDE || joint.Side == LEFT_SIDE {
-		if hasExternalJoint(jc.Piece,0) && hasExternalJoint(jc.Piece,2){
+		if hasExternalJoint(jc.Piece, 0) && hasExternalJoint(jc.Piece, 2) {
 			percentInc = 0.0
-		}else if hasExternalJoint(jc.Piece, 0) {
+		} else if hasExternalJoint(jc.Piece, 0) {
 			percentInc += PERCENTAGE
-		}else if hasExternalJoint(jc.Piece, 2) {
+		} else if hasExternalJoint(jc.Piece, 2) {
 			percentInc += PERCENTAGE
 		}
 	} else if joint.Side == BOTTOM_SIDE || joint.Side == TOP_SIDE {
-		if hasExternalJoint(jc.Piece, 3) && hasExternalJoint(jc.Piece,1){
+		if hasExternalJoint(jc.Piece, 3) && hasExternalJoint(jc.Piece, 1) {
 			percentInc = 0.0
-		}else if hasExternalJoint(jc.Piece, 3) {
+		} else if hasExternalJoint(jc.Piece, 3) {
 			percentInc += PERCENTAGE
-		}else if hasExternalJoint(jc.Piece, 1) {
+		} else if hasExternalJoint(jc.Piece, 1) {
 			percentInc += PERCENTAGE
 		}
 	}
 	if joint.Side == RIGHT_SIDE {
 		//move back Percentage amount
-		x, y = (from.Bounds().Max.X - Percentage(piece, PERCENTAGE)), (from.Bounds().Max.Y  + Percentage(piece,percentInc)) / 2 //half way down the right hand side
+		x, y = (from.Bounds().Max.X - Percentage(piece, PERCENTAGE)), (from.Bounds().Max.Y+Percentage(piece, percentInc))/2 //half way down the right hand side
 		point := image.Pt(x, y)
 		circleImg = &circle{point, variableRadius(piece), from, true, image.Rect(point.X, from.Bounds().Max.Y, from.Bounds().Max.X, from.Bounds().Min.Y)}
 	}
 	//left
 	if joint.Side == LEFT_SIDE {
 
-		x, y = (from.Bounds().Min.X + Percentage(piece, PERCENTAGE)), (from.Bounds().Max.Y + Percentage(piece,percentInc)) /2 //half way down the left side
+		x, y = (from.Bounds().Min.X + Percentage(piece, PERCENTAGE)), (from.Bounds().Max.Y+Percentage(piece, percentInc))/2 //half way down the left side
 		point := image.Pt(x, y)
 		circleImg = &circle{point, variableRadius(piece), from, true, image.Rect(point.X, from.Bounds().Min.Y, from.Bounds().Min.X, from.Bounds().Max.Y)}
 
@@ -210,7 +210,7 @@ func (jc JointCutter) cutExternal(joint PieceJoint, from image.Image) (image.Ima
 	//top
 	if joint.Side == TOP_SIDE {
 		x, y = from.Bounds().Max.X/2, from.Bounds().Min.Y+Percentage(piece, PERCENTAGE) //half way across top line
-		point := image.Pt(x, y)                                                                //where the circle is centered around
+		point := image.Pt(x, y)                                                         //where the circle is centered around
 		circleImg = &circle{point, variableRadius(piece), from, true, image.Rect(from.Bounds().Max.X, y, from.Bounds().Min.X, from.Bounds().Min.Y)}
 	}
 	//bottom

@@ -2,7 +2,7 @@ package jigsaw_test
 
 import (
 	"github.com/maleck13/jigsaw"
-	"github.com/stretchr/testify/assert"
+	"github.com/maleck13/jigsaw/Godeps/_workspace/src/github.com/stretchr/testify/assert"
 	"image"
 	"image/jpeg"
 	"os"
