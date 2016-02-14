@@ -39,46 +39,116 @@ func (JigsawPieceMarker) MarkPieces(pieces []*Piece, piecesPerRow, numRows int) 
 	retPieces := make([]*Piece, 0)
 	for i := 0; i < len(pieces); i++ {
 		p := pieces[i]
-		if p.IsCorner {
-			if (i+1)/piecesPerRow == 1 || (i+1)/piecesPerRow == numRows {
-				//top right or bottom right
-				p.Joints = []PieceJoint{{
-					External: false,
-					Side:     LEFT_SIDE,
-				}}
-				if (i+1)/piecesPerRow == numRows {
-					p.Joints = append(p.Joints, PieceJoint{
-						External: true,
-						Side:     TOP_SIDE,
-					})
-				} else {
-					p.Joints = append(p.Joints, PieceJoint{
-						External: false,
-						Side:     BOTTOM_SIDE,
-					})
-				}
-			} else {
-
-				p.Joints = []PieceJoint{{
-					External: true,
+		if p.IsCorner{
+			if i == 0{
+				//right corner
+				fmt.Println("top left corner", p.Name)
+				p.Joints = append(p.Joints, PieceJoint{
 					Side:     RIGHT_SIDE,
-				}}
-				if i == 0 {
-					p.Joints = append(p.Joints, PieceJoint{
-						External: false,
-						Side:     BOTTOM_SIDE,
-					})
-				} else {
-					p.Joints = append(p.Joints, PieceJoint{
-						External: true,
-						Side:     TOP_SIDE,
-					})
-				}
+					External: true,
+				}, PieceJoint{
+					Side: BOTTOM_SIDE,
+					External:true,
+				})
+			}else if p.Index == piecesPerRow{
+				fmt.Println("top right corner", p.Name)
+				p.Joints = append(p.Joints, PieceJoint{
+					Side:     LEFT_SIDE,
+					External: false,
+				}, PieceJoint{
+					Side: BOTTOM_SIDE,
+					External:true,
+				})
+				//left corner
+			}else if p.Index % piecesPerRow == 1{
+				fmt.Println("bottom left corner", p.Name)
+				//bottom left
+				p.Joints = append(p.Joints, PieceJoint{
+					Side:     RIGHT_SIDE,
+					External: true,
+				}, PieceJoint{
+					Side: TOP_SIDE,
+					External:false,
+				})
+			}else if p.Index == (piecesPerRow * numRows){
+				fmt.Println("bottom right corner", p.Name)
+				//bottom right
+				p.Joints = append(p.Joints, PieceJoint{
+					Side:     LEFT_SIDE,
+					External: false,
+				}, PieceJoint{
+					Side: TOP_SIDE,
+					External:false,
+				})
+			}
+		}else {
+			if p.FarLeftVerticalRow(){
+				//its not a corner and it on the left edge
+				p.Joints = append(p.Joints, PieceJoint{
+					Side:     RIGHT_SIDE,
+					External: true,
+				}, PieceJoint{
+					Side:     TOP_SIDE,
+					External: false,
+				}, PieceJoint{
+					Side: BOTTOM_SIDE,
+					External:true,
+				})
+
+			}else if p.FarRightVerticalRow(){
+				//TODO these pieces are slightly off for some reason
+				//its not a corner and it on the right edge
+				p.Joints = append(p.Joints, PieceJoint{
+					Side:     LEFT_SIDE,
+					External: false,
+				}, PieceJoint{
+					Side:     TOP_SIDE,
+					External: false,
+				}, PieceJoint{
+					Side: BOTTOM_SIDE,
+					External:true,
+				})
+			}else if p.BottomRow(){
+				p.Joints = append(p.Joints, PieceJoint{
+					Side:     RIGHT_SIDE,
+					External: true,
+				}, PieceJoint{
+					Side:     TOP_SIDE,
+					External: true,
+				}, PieceJoint{
+					Side: LEFT_SIDE,
+					External:false,
+				})
+			}else if p.TopRow(){
+				p.Joints = append(p.Joints, PieceJoint{
+					Side:     RIGHT_SIDE,
+					External: true,
+				}, PieceJoint{
+					Side:     BOTTOM_SIDE,
+					External: true,
+				}, PieceJoint{
+					Side: LEFT_SIDE,
+					External:false,
+				})
+			}else {
+				p.Joints = append(p.Joints, PieceJoint{
+					Side:     RIGHT_SIDE,
+					External: true,
+				}, PieceJoint{
+					Side:     BOTTOM_SIDE,
+					External: false,
+				},PieceJoint{
+					Side: LEFT_SIDE,
+					External:false,
+				},PieceJoint{
+					Side: TOP_SIDE,
+					External:false,
+				})
 			}
 		}
-
-		retPieces = append(retPieces, p)
+		retPieces = append(retPieces,p)
 	}
+
 	return retPieces
 }
 
@@ -230,6 +300,7 @@ func (JigsawPieceCutter) ShapePiece(piece *Piece) (*Piece, error) {
 	//fill a semi circle with transparency
 	//the piece is 20% larger on each side add any cuts then crop down sides without external piece
 	jointCutter := JointCutter{Piece: piece}
+	fmt.Println("cutting piece ", piece.Name, piece.Joints)
 	var img = piece.Image
 	var err error
 	for _, joint := range piece.Joints {

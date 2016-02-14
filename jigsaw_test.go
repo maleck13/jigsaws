@@ -80,7 +80,7 @@ func openImage(t *testing.T, path string) image.Image {
 
 func Test4pieceJigsaw(t *testing.T) {
 	img := openImage(t, JPG_SAMPLE)
-	builder := jigsaw.NewJigsawBuilder(img, 12)
+	builder := jigsaw.NewJigsawBuilder(img, 24)
 	jig, err := builder.Build()
 	assert.NoError(t, err, "did not expect an error")
 	assert.NotNil(t, jig, "expected jigsaw")
@@ -89,104 +89,104 @@ func Test4pieceJigsaw(t *testing.T) {
 	//	}
 }
 
-func TestShapePiece0and1(t *testing.T) {
-	img := openImage(t, JPG_SAMPLE)
-	builder := jigsaw.NewJigsawBuilder(img, 12)
-	builder.NumRows = 3
-	pieces, err := builder.BuildPieces()
-	assert.NoError(t, err, "not expected error")
-	piece := pieces[0]
-	piece.Joints = []jigsaw.PieceJoint{
-		jigsaw.PieceJoint{
-			Side:     0,
-			External: false,
-		},
-		jigsaw.PieceJoint{
-			Side:     1,
-			External: false,
-		},
-		jigsaw.PieceJoint{
-			Side:     2,
-			External: false,
-		},
-		jigsaw.PieceJoint{
-			Side:     3,
-			External: true,
-		},
-	}
-	pieces, err = builder.PieceCutter.CutPieces(img, pieces)
-	assert.NotNil(t, pieces, "pieces expected")
-
-	piece.Name = "testpiece0"
-
-	pieceCutter := jigsaw.JigsawPieceCutter{}
-	pieceCutter.ShapePiece(piece)
-
-}
-
-func TestShapePieceSide1(t *testing.T) {
-	img := openImage(t, JPG_SAMPLE)
-	builder := jigsaw.NewJigsawBuilder(img, 12)
-	builder.NumRows = 3
-	pieces, err := builder.BuildPieces()
-	assert.NoError(t, err, "not expected error")
-	pieces, err = builder.PieceCutter.CutPieces(img, pieces)
-	assert.NotNil(t, pieces, "pieces expected")
-	piece := pieces[0]
-	piece.Name = "testpiece1"
-	piece.Joints = []jigsaw.PieceJoint{
-		jigsaw.PieceJoint{
-			Side:     1,
-			External: true,
-		},
-	}
-	pieceCutter := jigsaw.JigsawPieceCutter{}
-	pieceCutter.ShapePiece(piece)
-
-}
-
-func TestShapePieceSide2(t *testing.T) {
-	img := openImage(t, JPG_SAMPLE)
-	builder := jigsaw.NewJigsawBuilder(img, 12)
-	builder.NumRows = 3
-	pieces, err := builder.BuildPieces()
-	assert.NoError(t, err, "not expected error")
-	piece := pieces[0]
-	piece.Name = "testpiece2"
-	piece.Joints = []jigsaw.PieceJoint{
-		jigsaw.PieceJoint{
-			Side:     2,
-			External: true,
-		},
-	}
-	pieces, err = builder.PieceCutter.CutPieces(img, pieces)
-	assert.NotNil(t, pieces, "pieces expected")
-
-	pieceCutter := jigsaw.JigsawPieceCutter{}
-	pieceCutter.ShapePiece(piece)
-
-}
-
-func TestShapePieceSide3(t *testing.T) {
-	img := openImage(t, JPG_SAMPLE)
-	builder := jigsaw.NewJigsawBuilder(img, 12)
-	builder.NumRows = 3
-	pieces, err := builder.BuildPieces()
-	assert.NoError(t, err, "not expected error")
-	pieces, err = builder.PieceCutter.CutPieces(img, pieces)
-	assert.NotNil(t, pieces, "pieces expected")
-	piece := pieces[0]
-	piece.Name = "testpiece3"
-	piece.Joints = []jigsaw.PieceJoint{
-		jigsaw.PieceJoint{
-			Side:     3,
-			External: true,
-		},
-	}
-	pieceCutter := jigsaw.JigsawPieceCutter{}
-	pieceCutter.ShapePiece(piece)
-
-}
+//func TestShapePiece0and1(t *testing.T) {
+//	img := openImage(t, JPG_SAMPLE)
+//	builder := jigsaw.NewJigsawBuilder(img, 12)
+//	builder.NumRows = 3
+//	pieces, err := builder.BuildPieces()
+//	assert.NoError(t, err, "not expected error")
+//	piece := pieces[0]
+//	piece.Joints = []jigsaw.PieceJoint{
+//		jigsaw.PieceJoint{
+//			Side:     0,
+//			External: false,
+//		},
+//		jigsaw.PieceJoint{
+//			Side:     1,
+//			External: false,
+//		},
+//		jigsaw.PieceJoint{
+//			Side:     2,
+//			External: false,
+//		},
+//		jigsaw.PieceJoint{
+//			Side:     3,
+//			External: true,
+//		},
+//	}
+//	pieces, err = builder.PieceCutter.CutPieces(img, pieces)
+//	assert.NotNil(t, pieces, "pieces expected")
+//
+//	piece.Name = "testpiece0"
+//
+//	pieceCutter := jigsaw.JigsawPieceCutter{}
+//	pieceCutter.ShapePiece(piece)
+//
+//}
+//
+//func TestShapePieceSide1(t *testing.T) {
+//	img := openImage(t, JPG_SAMPLE)
+//	builder := jigsaw.NewJigsawBuilder(img, 12)
+//	builder.NumRows = 3
+//	pieces, err := builder.BuildPieces()
+//	assert.NoError(t, err, "not expected error")
+//	pieces, err = builder.PieceCutter.CutPieces(img, pieces)
+//	assert.NotNil(t, pieces, "pieces expected")
+//	piece := pieces[0]
+//	piece.Name = "testpiece1"
+//	piece.Joints = []jigsaw.PieceJoint{
+//		jigsaw.PieceJoint{
+//			Side:     1,
+//			External: true,
+//		},
+//	}
+//	pieceCutter := jigsaw.JigsawPieceCutter{}
+//	pieceCutter.ShapePiece(piece)
+//
+//}
+//
+//func TestShapePieceSide2(t *testing.T) {
+//	img := openImage(t, JPG_SAMPLE)
+//	builder := jigsaw.NewJigsawBuilder(img, 12)
+//	builder.NumRows = 3
+//	pieces, err := builder.BuildPieces()
+//	assert.NoError(t, err, "not expected error")
+//	piece := pieces[0]
+//	piece.Name = "testpiece2"
+//	piece.Joints = []jigsaw.PieceJoint{
+//		jigsaw.PieceJoint{
+//			Side:     2,
+//			External: true,
+//		},
+//	}
+//	pieces, err = builder.PieceCutter.CutPieces(img, pieces)
+//	assert.NotNil(t, pieces, "pieces expected")
+//
+//	pieceCutter := jigsaw.JigsawPieceCutter{}
+//	pieceCutter.ShapePiece(piece)
+//
+//}
+//
+//func TestShapePieceSide3(t *testing.T) {
+//	img := openImage(t, JPG_SAMPLE)
+//	builder := jigsaw.NewJigsawBuilder(img, 12)
+//	builder.NumRows = 3
+//	pieces, err := builder.BuildPieces()
+//	assert.NoError(t, err, "not expected error")
+//	pieces, err = builder.PieceCutter.CutPieces(img, pieces)
+//	assert.NotNil(t, pieces, "pieces expected")
+//	piece := pieces[0]
+//	piece.Name = "testpiece3"
+//	piece.Joints = []jigsaw.PieceJoint{
+//		jigsaw.PieceJoint{
+//			Side:     3,
+//			External: true,
+//		},
+//	}
+//	pieceCutter := jigsaw.JigsawPieceCutter{}
+//	pieceCutter.ShapePiece(piece)
+//
+//}
 
 //func TestJigsawShouldHave16EdgePieces(t *testing.T) {
 //	img := openImage(t, JPG_SAMPLE)
